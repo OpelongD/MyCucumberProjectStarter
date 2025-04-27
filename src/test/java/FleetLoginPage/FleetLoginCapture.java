@@ -2,25 +2,18 @@ package FleetLoginPage;
 
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 
-import static net.serenitybdd.core.Serenity.getDriver;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
-
-import net.serenitybdd.screenplay.targets.Target;
-
-public class FleetLoginCapture {
+public class FleetLoginCapture extends PageObject {
 
     // Login IN elements
     String Url = "https://korridor.crownsoftware.co.za/";
@@ -30,7 +23,7 @@ public class FleetLoginCapture {
     String LoginButtonXpath = "//button[normalize-space()='Log In']";
 
     public FleetLoginCapture(WebDriver driver) {
-        super();
+        super(driver);
     }
 
 
@@ -54,11 +47,15 @@ public class FleetLoginCapture {
     @Step("User clik RememberMeRadioButton")
     public void RememberMe() {
         Objects.requireNonNull($(By.xpath(RememberMeXpath))).click();
+
+
     }
 
-    private WebElement $(By xpath) {
-        return null;
+    public WebElementFacade $(By locator) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        return (WebElementFacade) wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
+
 
     @Step("User click LoginButton")
     public void ClickLogin() {
