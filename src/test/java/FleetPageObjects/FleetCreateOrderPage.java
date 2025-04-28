@@ -4,8 +4,8 @@ package FleetPageObjects;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.PageObjects;
+import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -15,10 +15,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.Objects;
 
-import static java.util.Objects.*;
+import static java.util.Objects.requireNonNull;
 import static net.serenitybdd.core.Serenity.getDriver;
 
-public class FleetCreateOrderPage extends PageObject {
+public class FleetCreateOrderPage extends PageObjects {
+
+
+    // Login IN elements
+
+    String Url = "https://korridor.crownsoftware.co.za/";
+    String UserNameXpath = "//input[@id='Input_Email']";
+    String PasswordXpath = "//input[@id='Input_Password']";
+    String RememberMeXpath = "//input[@type='checkbox']";
+    String LoginButtonXpath = "//button[normalize-space()='Log In']";
+    String DashboardUrl = "https://korridor.crownsoftware.co.za/Home/Index";
+
+    // Landing Page Elements
+    String TenantDropXpath = "//select[@name='tenantId']";
 
     // New Order Elements
     String CreateOrderButtonXpath = "//a[@href='/Order/Create']";
@@ -31,6 +44,62 @@ public class FleetCreateOrderPage extends PageObject {
     String QTYXpath = "//*[@id=\"uberForm\"]/section[2]/div[2]/div/div[5]/div/input";
     String SlotTimeXpath = "//*[@id=\"SlotTime\"]";
 
+    public FleetCreateOrderPage(WebDriver driver) {
+        super(driver);
+    }
+
+
+    // Action Login Tests
+
+    @Step("User access TMS Website")
+    public void TMSWebsite() {
+        getDriver().get(Url);
+        getDriver().manage().window().maximize();
+    }
+
+    @Step("User captures valid Login Credentials")
+    public void LogIn(String UserName, String Password) {
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(UserNameXpath))).sendKeys(UserName);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(PasswordXpath))).sendKeys(Password);
+    }
+
+
+    @Step("User clik RememberMeRadioButton")
+    public void RememberMe() {
+        requireNonNull(getDriver().findElement(By.xpath(RememberMeXpath))).click();
+
+    }
+
+    private WebElement $(By xpath) {
+        return null;
+    }
+
+    @Step("User click LoginButton")
+    public void ClickLogin() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginButtonXpath))).click();
+
+        // Validate redirect to dashboard
+        wait.until(ExpectedConditions.urlToBe(DashboardUrl));
+        assert getDriver().getCurrentUrl().equals(DashboardUrl) : "User was not redirected to dashboard page";
+
+    }
+
+
+    @Step("User select demo on Tenent drop list")
+    public void SelectDemo() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
+        WebElement demo = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(TenantDropXpath)));
+        Select selectObject = new Select(demo);
+        selectObject.selectByValue("1");
+
+        // Validate Demo Tenant is selected
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@name='tenantId']//option[@value='1']")));
+        assert getDriver().findElement(By.xpath("//select[@name='tenantId']//option[@value='1']")).isSelected() : "Demo Tenant was not selected";
+    }
+
     // New Order Methods
 
     @Step("Click Order")
@@ -38,12 +107,20 @@ public class FleetCreateOrderPage extends PageObject {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
         WebElement Order = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(OrderXpath1)));
         Order.click();
+
+        // Validate Order Page is displayed
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/Order']")));
+        assert getDriver().findElement(By.xpath("//a[@href='/Order']")).isDisplayed() : "Order Page was not displayed";
     }
 
     public void CreateOrder() {
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
         WebElement Order = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(OrderXpath1)));
         Order.click();
+
+        // Validate Create Order Page is displayed
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='/Order/Create']")));
+        assert getDriver().findElement(By.xpath("//a[@href='/Order/Create']")).isDisplayed() : "Create Order Page was not displayed";
     }
 
     public void EnterOrderId(String s) {
@@ -110,7 +187,9 @@ public class FleetCreateOrderPage extends PageObject {
 
     public void EnterQuantity(String number) throws InterruptedException {
         //Thread.sleep(1000);
-        WebElement textField = $(By.xpath(QTYXpath)); // replace with the actual locator
+
+        // replace with the actual locator
+        WebElement textField = $(By.xpath(QTYXpath));
 
         // Click on the text field
         textField.click();
@@ -137,24 +216,24 @@ public class FleetCreateOrderPage extends PageObject {
         //Thread.sleep(1000);
     }
 
-    public void CLICKEDIT() throws InterruptedException {
-        Thread.sleep(2000);
-
-        WebElement EditButton = $(By.xpath("//*[@id=\"edit\"]"));
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView(true)", EditButton);
-        assert EditButton != null;
-        EditButton.click();
-    }
-
-    public void AuthClick() throws InterruptedException {
-        Thread.sleep(1000);
-        WebElement AuthButton = $(By.xpath("//input[@value='Authorise']"));
-        JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        js.executeScript("arguments[0].scrollIntoView(true)", AuthButton);
-        assert AuthButton != null;
-        AuthButton.click();
-    }
+//    public void CLICKEDIT() throws InterruptedException {
+//        Thread.sleep(2000);
+//
+//        WebElement EditButton = $(By.xpath("//*[@id=\"edit\"]"));
+//        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+//        js.executeScript("arguments[0].scrollIntoView(true)", EditButton);
+//        assert EditButton != null;
+//        EditButton.click();
+//    }
+//
+//    public void AuthClick() throws InterruptedException {
+//        Thread.sleep(1000);
+//        WebElement AuthButton = $(By.xpath("//input[@value='Authorise']"));
+//        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+//        js.executeScript("arguments[0].scrollIntoView(true)", AuthButton);
+//        assert AuthButton != null;
+//        AuthButton.click();
+//    }
 
 
 }
