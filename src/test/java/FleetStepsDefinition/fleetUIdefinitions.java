@@ -9,51 +9,54 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.PageObjects;
+import org.openqa.selenium.WebDriver;
 
 public class fleetUIdefinitions extends PageObject {
+
+    // Adding annotations to the step definitions to inject the WebDriver object
 
     @Steps
     FleetCreateOrderPage fleetCreateOrderPage;
     @Steps
     FleetLandingPage fleetLandingPage;
 
-    @Given("User has valid data to create an order")
-    public void user_has_valid_data_to_create_an_order() {
-        fleetCreateOrderPage.TMSWebsite();
-        fleetCreateOrderPage.LogIn("ishmael.direro@korridor.com", "Ish@cyest#982");
-        fleetCreateOrderPage.RememberMe();
-        fleetCreateOrderPage.ClickLogin();
 
+    // Declared step definitions
+    @Given("User has OpenWebsite and logged in with valid Credentials")
+    public void user_has_open_website_and_logged_in_with_valid_credentials() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
-    @Then("User navigates to the Dashboard page")
-    public void user_navigates_to_the_dashboard_page() {
-        fleetLandingPage.selectTenant();
-        fleetCreateOrderPage.Order();
+    @Given("USer is direct to dashboard")
+    public void u_ser_is_direct_to_dashboard() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
-    @And("User clicks the Create Order button")
+    @When("User clicks the Order button")
+    public void user_clicks_the_order_button() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+
+    @When("User clicks the Create Order button")
     public void user_clicks_the_create_order_button() {
-        fleetCreateOrderPage.CreateOrder();
-        fleetCreateOrderPage.EnterOrderId("OrderId 1st");
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
-
     @When("User fills in the Order Information with: {string}, {string}, {string}, {string}, {string}, {string},{string}, {string}, {string}")
-    public void user_fills_in_the_order_information_with(String string, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9) throws InterruptedException {
-        fleetCreateOrderPage.EnterOrderId("OrderId 1st");
-        fleetCreateOrderPage.SelectCustomer("SIM001 - Simone Sims");
-        fleetCreateOrderPage.SelectRoute("000001 - Zinja Mguni");
-        fleetCreateOrderPage.SelectProduct("Product");
-        fleetCreateOrderPage.enterProductDesc("Testing");
-        fleetCreateOrderPage.SelectDeliveryType("DeliveryType");
-        fleetCreateOrderPage.EnterQuantity("20");
-        fleetCreateOrderPage.EnterSlotTime("00:00");
+    public void user_fills_in_the_order_information_with(String string, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
+    }
+    @Then("User click SaveButton")
+    public void user_click_save_button() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
-    @Then("User click SaveButton")
-    public void SaveButton() throws InterruptedException {
-        fleetCreateOrderPage.ClickSaveButton();
-    }
 }
 
 
